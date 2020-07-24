@@ -63,7 +63,7 @@ def root():
             icons.dots.green: [(37.4419, -122.1419), (37.4500, -122.1350)],
             icons.dots.blue: [(37.4300, -122.1400, "Hello World")],
         },
-        style="height:400px;width:600px;margin:0;",
+        style="height:600px;width:1200px;margin:0;",
     )
     return render_template("simple.html", gmap=gmap)
     #return app.send_static_file('index.html')
