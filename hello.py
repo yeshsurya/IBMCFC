@@ -1,5 +1,5 @@
 from cloudant import Cloudant
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify,Blueprint,redirect,url_for
 from forms import LoginForm, RegisterForm 
 import atexit
 import os
@@ -42,17 +42,29 @@ elif os.path.isfile('vcap-local.json'):
 # On IBM Cloud Cloud Foundry, get the port number from the environment variable PORT
 # When running this app on the local machine, default the port to 8000
 port = int(os.getenv('PORT', 8000))
-@app.route('/login',methods=['GET','POST'])
+
+app.config['SECRET_KEY'] = 'any secret string'
+
+users_blueprint = Blueprint(
+    'users', __name__,
+    template_folder='static'
+)   # pragma: no cover
+
+
+@app.route('/',methods=['GET','POST'])
 def login():
     error = None
+    import os 
+    #SECRET_KEY = os.urandom(32)
+    #app.config['SECRET_KEY'] = SECRET_KEY
     form=LoginForm(request.form)
     if (request.method=='POST'):
         if (request.form['username'] != 'admin' or request.form['password'] != 'admin'):
             error="Invalid credentials. Please try again."
         else:
-            return redirect(url_for('map_created_in_view'))
+            return redirect(url_for('root'))
     return render_template('login.html',form=form,error=error)        
-@app.route('/')
+@app.route('/map')
 def root():
     gmap = Map(
         identifier="gmap",

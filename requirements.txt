@@ -4,3 +4,4 @@ flask-googlemaps==0.4.0
 dynaconf==3.0.0
 WTForms==2.0.1
 flask-wtf==0.14.3
+Flask-Login==0.2.11
