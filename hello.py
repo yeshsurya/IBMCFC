@@ -1,6 +1,6 @@
 from cloudant import Cloudant
 from flask import Flask, render_template, request, jsonify,Blueprint,redirect,url_for
-from forms import LoginForm, RegisterForm 
+from forms import LoginForm, RegisterForm, DisasterUpdateForm 
 import atexit
 import os
 import json
@@ -140,7 +140,17 @@ def login():
             error="Invalid credentials. Please try again."
         else:
             return redirect(url_for('root'))
-    return render_template('login.html',form=form,error=error)        
+    return render_template('login.html',form=form,error=error)
+
+@app.route('/desc',methods=['GET','POST'])
+def desc():   
+    severityOps = ['Critical', 'Medium', 'Low']
+    form=DisasterUpdateForm(request.form)
+    if (request.method=='POST'):
+        response = requests.post(url="api_url", json=form)
+        return redirect(url_for('root'))    
+    return render_template('disaster_desc.html',form=form,severityOps=severityOps)    
+
 @app.route('/map')
 def root():
     gmap = Map(

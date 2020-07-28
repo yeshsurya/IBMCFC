@@ -7,6 +7,10 @@ class LoginForm(Form):
     username = TextField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
 
+class DisasterUpdateForm(Form):
+    severity = TextField('severity', validators=[DataRequired()])
+    description = TextField('description', validators=[DataRequired(), Length(min=3, max=20)])
+    
 
 class RegisterForm(Form):
     username = TextField(

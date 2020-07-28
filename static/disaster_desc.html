@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- <script src="js/upload.js" type="text/javascript"></script>
+<script src="webcam.js"></script> -->
+<h1>Disaster Update Form</h1>
+<br>
+<form class="form-disaster_desc_update" role="form" method="post" action="{{ url_for('desc') }}">
+  {{ form.csrf_token }}
+  <p>
+    <!-- {{ form.severity(placeholder="severity") }} -->
+    <label>Severity :</label>
+    <select name="sev">      
+      <option value="{{severityOps[0]}}" selected>{{severityOps[0]}}</option>
+      {% for severity in severityOps[1:] %}
+        <option value="{{severity}}">{{severity}}</option>
+      {% endfor %}
+    </select>
+  </p>
+  <p>
+    {{ form.description(placeholder="description") }}   
+  </p>
+  <!-- <div id="my_camera"></div>
+  <input type="button" onclick="snap()" value="Snap">
+  <div id="results"></div> -->
+  <button class="btn btn-sm btn-success" type="submit" >Submit</button>
+</form>
+
+{% endblock %}
