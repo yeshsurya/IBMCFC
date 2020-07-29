@@ -81,7 +81,7 @@ def retrieve_from_db():
             } 
     #qr= Query(db, selector=selector)
     #query_res = qr(limit=1000, skip=0)['docs']
-    query_res = Result(db.all_docs)['doc']
+    query_res = Result(db.all_docs,include_docs=True)
     print("Query res is ")
     print(query_res)
     # code to add into maps
@@ -89,17 +89,25 @@ def retrieve_from_db():
     red_marker=[]
     orange_marker=[]
     white_marker=[]
-    for each in query_res:
-        print(dir(each))
-        if (each['danger']=='Low'): 
-            green_marker.append((each['latitude'], each['longitude'], each['description']))
-        elif (each['danger']=='Medium'): 
-            orange_marker.append((each['latitude'], each['longitude'], each['description']))
-        elif (each['danger']=='Critical'):
-            red_marker.append((each['latitude'], each['longitude'], each['description']))
-        else: 
-            white_marker.append((each['latitude'], each['longitude'], each['description']))
-            
+    try:
+        for ea in query_res:
+            each = ea[0]['doc']
+            print(each)
+            print(dir(each))
+            if (each['danger']=='Low'): 
+                green_marker.append((each['latitude'], each['longitude'], each['description']))
+            elif (each['danger']=='Medium'): 
+                orange_marker.append((each['latitude'], each['longitude'], each['description']))
+            elif (each['danger']=='Critical'):
+                red_marker.append((each['latitude'], each['longitude'], each['description']))
+            else: 
+                white_marker.append((each['latitude'], each['longitude'], each['description']))
+    except:
+        pass
+    print("Green Marker is ")
+    print(green_marker)    
+    print("Orange Marker is")
+    print(orange_marker)
     return (green_marker,red_marker,orange_marker,white_marker)
     #print(green_marker)
 
