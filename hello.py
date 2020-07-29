@@ -150,7 +150,9 @@ def desc():
         #response = requests.post(url="api_url", json=form)
         return redirect(url_for('root'))    
     return render_template('disaster_desc.html',form=form,severityOps=severityOps)    
-
+#Javascript to get geolocation position
+#navigator.geolocation.getCurrentPosition(function(position){console.log(position.coords.latitude)})
+#navigator.geolocation.getCurrentPosition(function(position){console.log(position.coords.longitude)})
 @app.route('/map')
 def root():
     green_marker,red_marker,orange_marker,white_marker  = retrieve_from_db()
