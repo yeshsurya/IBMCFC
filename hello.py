@@ -48,15 +48,15 @@ elif os.path.isfile('vcap-local.json'):
 #  * 
 #  * @return 
 #  */
-def insert_into_db():
+def insert_into_db(inputdata):
     #Assuming sample data to be the input
     #TODO: also get user name from login as a db field
     for data in sample_data:
         json_doc= {
             "latitude" : data[0], 
             "longitude" : data[1], 
-            "danger" : data[2], 
-            "description" : data[3]
+            "danger" : inputdata['sev'], 
+            "description" : inputdata['description']
         }
         new_document = db.create_document(json_doc)
         if new_document.exists():
@@ -112,7 +112,7 @@ sample_data = [
     [5.989 ,-50.1400, "Safe", "none"],
 ]
 
-insert_into_db()
+#insert_into_db()
 retrieve_from_db()
 
 
@@ -147,7 +147,11 @@ def desc():
     severityOps = ['Critical', 'Medium', 'Low']
     form=DisasterUpdateForm(request.form)
     if (request.method=='POST'):
-        response = requests.post(url="api_url", json=form)
+        print(request.form['description'])
+        print(request.form['sev'])
+        print(request.form.to_dict())
+        insert_into_db(request.form.to_dict())
+        #response = requests.post(url="api_url", json=form)
         return redirect(url_for('root'))    
     return render_template('disaster_desc.html',form=form,severityOps=severityOps)    
 
