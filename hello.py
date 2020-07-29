@@ -70,23 +70,17 @@ def insert_into_db():
 #  * @return 
 #  */
 def retrieve_from_db():
-    #Retrieval will be based on geolocation of user: lat,long
+    # Retrieval will be based on geolocation of user: lat,long
     # latitude: 0.001 degree = 111 m 
     lat = 5.989
     lon = -50.14
     selector = {
-            'latitude': {
-                '$gte': lat-0.0005, 
-                '$lte' : lat+ 0.0005
-                 } ,
-             "longitude":  {
-                 '$gte': lon-0.0005, 
-                 '$lte' : lon+0.0005
-                }
+            '_id': {
+                '$gt': 0, 
+                 } 
             } 
     qr= Query(db, selector=selector)
     query_res = qr(limit=1000, skip=0)['docs']
-    
     # code to add into maps
     green_marker=[]
     red_marker=[]
