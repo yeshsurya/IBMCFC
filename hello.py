@@ -87,14 +87,16 @@ def retrieve_from_db():
     orange_marker=[]
     white_marker=[]
     for each in query_res:
-        if (each['danger']=='Safe'): 
+        if (each['danger']=='Low'): 
             green_marker.append((each['latitude'], each['longitude'], each['description']))
         elif (each['danger']=='Medium'): 
-            orange_marker = (each['latitude'], each['longitude'], each['description'])
-        elif (each['danger']=='High'):
-            red_marker = (each['latitude'], each['longitude'], each['description'])
+            orange_marker.append((each['latitude'], each['longitude'], each['description']))
+        elif (each['danger']=='Critical'):
+            red_marker.append((each['latitude'], each['longitude'], each['description']))
         else: 
-            white_marker: (each['latitude'], each['longitude'], each['description'])
+            white_marker.append((each['latitude'], each['longitude'], each['description']))
+            
+    return (green_marker,red_marker,orange_marker,white_marker)
     #print(green_marker)
 
 # todo : REMOVE SAMPLE DATA 
@@ -107,7 +109,7 @@ sample_data = [
 ]
 
 #insert_into_db()
-retrieve_from_db()
+#retrieve_from_db()
 
 
 # On IBM Cloud Cloud Foundry, get the port number from the environment variable PORT
@@ -151,14 +153,17 @@ def desc():
 
 @app.route('/map')
 def root():
+    green_marker,red_marker,orange_marker,white_marker  = retrieve_from_db()
     gmap = Map(
         identifier="gmap",
         varname="gmap",
         lat=37.4419,
         lng=-122.1419,
         markers={
-            icons.dots.green: [(37.4419, -122.1419), (37.4500, -122.1350)],
-            icons.dots.blue: [(37.4300, -122.1400, "Hello World")],
+            icons.dots.green: green_marker,
+            icons.dots.red: red_marker,
+            icons.dots.pink:orange_marker,
+            icons.dots.purple:white_marker
         },
         style="height:600px;width:1330px;margin:0;",
     )
