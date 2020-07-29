@@ -79,14 +79,18 @@ def retrieve_from_db():
                 '$gt': 0, 
                  } 
             } 
-    qr= Query(db, selector=selector)
-    query_res = qr(limit=1000, skip=0)['docs']
+    #qr= Query(db, selector=selector)
+    #query_res = qr(limit=1000, skip=0)['docs']
+    query_res = Result(db.all_docs)['doc']
+    print("Query res is ")
+    print(query_res)
     # code to add into maps
     green_marker=[]
     red_marker=[]
     orange_marker=[]
     white_marker=[]
     for each in query_res:
+        print(dir(each))
         if (each['danger']=='Low'): 
             green_marker.append((each['latitude'], each['longitude'], each['description']))
         elif (each['danger']=='Medium'): 
