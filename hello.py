@@ -52,17 +52,18 @@ elif os.path.isfile('vcap-local.json'):
 #  */
 def insert_into_db(inputdata):
     #Assuming sample data to be the input
-    #TODO: also get user name from login as a db field
-    for data in sample_data:
-        json_doc= {
-            "latitude" : data[0], 
-            "longitude" : data[1], 
-            "danger" : inputdata['sev'], 
-            "description" : inputdata['description']
-        }
-        new_document = db.create_document(json_doc)
-        if new_document.exists():
-            print(f"Document '{new_document}' successfully created.")
+    #TODO: also get user name from login as a db field   
+    global latitude
+    global longitude
+    json_doc= {
+        "latitude" : latitude, 
+        "longitude" : longitude, 
+        "danger" : inputdata['sev'], 
+        "description" : inputdata['description']
+    }
+    new_document = db.create_document(json_doc)
+    if new_document.exists():
+        print(f"Document '{new_document}' successfully created.")
     
 
 
@@ -93,7 +94,7 @@ def retrieve_from_db():
     white_marker=[]
     try:
         for ea in query_res:
-            each = ea[0]['doc']
+            each = ea['doc']
             print(each)
             print(dir(each))
             if (each['danger']=='Low'): 
@@ -110,6 +111,8 @@ def retrieve_from_db():
     print(green_marker)    
     print("Orange Marker is")
     print(orange_marker)
+    print("Red markers are")
+    print(red_marker)
     return (green_marker,red_marker,orange_marker,white_marker)
     #print(green_marker)
 
