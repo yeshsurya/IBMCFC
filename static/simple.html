@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <style>
 body {
   margin: 0;
@@ -64,10 +65,11 @@ body {
     <title>Document</title>
     {{ gmap.js }}
 </head>
-<body>
+<body onload="updateCo()">
+    <div id="geo"></div>
 	<div class="topnav" id="myTopnav">
 	  <a href="/desc" class="active">Mark Hazard</a>
-	  <a href="#news">News</a>
+	  <a href="#De-Mark">De-Mark Hazard</a>
 	  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
 		<i class="fa fa-bars"></i>
 	  </a>
@@ -82,6 +84,37 @@ function myFunction() {
   } else {
     x.className = "topnav";
   }
+}
+</script>
+
+
+<script>
+function updateCo(){
+$(document).ready(function(){
+console.log('Inside ready');
+var  lat = 0;
+var el = document.getElementById("geo");
+navigator.geolocation.getCurrentPosition(function(position){el.lat = position.coords.latitude ;});
+console.log(lat);
+var  lon = 0;
+navigator.geolocation.getCurrentPosition(function(position){el.lon = position.coords.longitude;})
+var data = { latitude: el.lat , 
+    longitude:el.lon	};
+console.log('Data is');
+console.log(data);
+$.ajax('/map', {
+    type: 'POST',  // http method
+	contentType: 'application/json;charset=UTF-8',
+    data:{ latitude: el.lat , 
+    longitude:el.lon	} ,  // data to submit
+    success: function (data, status, xhr) {
+       //console.log(data);
+    },
+    error: function (jqXhr, textStatus, errorMessage) {
+            
+    }
+});
+});
 }
 </script>
 </html>

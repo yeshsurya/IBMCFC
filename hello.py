@@ -165,14 +165,17 @@ def desc():
 #Javascript to get geolocation position
 #navigator.geolocation.getCurrentPosition(function(position){console.log(position.coords.latitude)})
 #navigator.geolocation.getCurrentPosition(function(position){console.log(position.coords.longitude)})
-@app.route('/map')
+@app.route('/map',methods=['GET','POST'])
 def root():
     green_marker,red_marker,orange_marker,white_marker  = retrieve_from_db()
-    gmap = Map(
+    if(request.method=='POST'):
+        print('printing request')
+        print(request.values)
+        gmap = Map(
         identifier="gmap",
         varname="gmap",
-        lat=37.4419,
-        lng=-122.1419,
+        lat=13.297813,
+        lng=77.804075,
         markers={
             icons.dots.green: green_marker,
             icons.dots.red: red_marker,
@@ -180,7 +183,22 @@ def root():
             icons.dots.purple:white_marker
         },
         style="height:600px;width:1330px;margin:0;",
-    )
+        )
+        return redirect(url_for('root'))
+    else:
+        gmap = Map(
+            identifier="gmap",
+            varname="gmap",
+            lat=13.297813,
+            lng=77.804075,
+            markers={
+                icons.dots.green: green_marker,
+                icons.dots.red: red_marker,
+                icons.dots.pink:orange_marker,
+                icons.dots.purple:white_marker
+            },
+            style="height:600px;width:1330px;margin:0;",
+        )
     return render_template("simple.html", gmap=gmap)
     #return app.send_static_file('index.html')
     #return render_template("location.html", mymap=gmap)
