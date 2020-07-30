@@ -94,14 +94,11 @@ $(document).ready(function(){
 console.log('Inside ready');
 var  lat = 0;
 var el = document.getElementById("geo");
-navigator.geolocation.getCurrentPosition(function(position){el.lat = position.coords.latitude ;});
-console.log(lat);
-var  lon = 0;
-navigator.geolocation.getCurrentPosition(function(position){el.lon = position.coords.longitude;})
-var data = { latitude: el.lat , 
-    longitude:el.lon	};
-console.log('Data is');
-console.log(data);
+navigator.geolocation.getCurrentPosition(function(position){el.lat = position.coords.latitude ;
+el.lon = position.coords.longitude ;
+console.log('Sending data');
+console.log({ latitude: el.lat , 
+    longitude:el.lon	});
 $.ajax('/map', {
     type: 'POST',  // http method
 	contentType: 'application/json;charset=UTF-8',
@@ -114,6 +111,12 @@ $.ajax('/map', {
             
     }
 });
+});
+var  lon = 0;
+navigator.geolocation.getCurrentPosition(function(position){el.lon = position.coords.longitude;})
+var data = { latitude: el.lat , 
+    longitude:el.lon	};
+
 });
 }
 </script>
