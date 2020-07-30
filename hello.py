@@ -17,7 +17,9 @@ FlaskDynaconf(app)
 db_name = 'mydb'
 client = None
 db = None
-
+latitude = 13.297813
+longitude = 77.804075
+load_count = 0
 if 'VCAP_SERVICES' in os.environ:
     vcap = json.loads(os.getenv('VCAP_SERVICES'))
     print('Found VCAP_SERVICES')
@@ -168,34 +170,31 @@ def desc():
 @app.route('/map',methods=['GET','POST'])
 def root():
     green_marker,red_marker,orange_marker,white_marker  = retrieve_from_db()
+    global latitude
+    global longitude
+    global load_count
     if(request.method=='POST'):
         print('printing request')
-        print(request.values)
-        gmap = Map(
-        identifier="gmap",
-        varname="gmap",
-        lat=13.297813,
-        lng=77.804075,
-        markers={
-            icons.dots.green: green_marker,
-            icons.dots.red: red_marker,
-            icons.dots.pink:orange_marker,
-            icons.dots.purple:white_marker
-        },
-        style="height:600px;width:1330px;margin:0;",
-        )
-        return redirect(url_for('root'))
+        inp_data = json.loads(request.get_data())
+        latitude = inp_data['latitude']
+        longitude = inp_data['longitude']
+        if(load_count == 0):
+            load_count = load_count + 1
+            return "reload"
+        else :
+            return "success"
     else:
         gmap = Map(
             identifier="gmap",
             varname="gmap",
-            lat=13.297813,
-            lng=77.804075,
+            lat=latitude,
+            lng=longitude,
             markers={
                 icons.dots.green: green_marker,
                 icons.dots.red: red_marker,
                 icons.dots.pink:orange_marker,
-                icons.dots.purple:white_marker
+                icons.dots.purple:white_marker, 
+                icons.dots.yellow:[(latitude,longitude,"You are here")]
             },
             style="height:600px;width:1330px;margin:0;",
         )

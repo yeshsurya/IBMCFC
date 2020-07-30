@@ -97,15 +97,18 @@ var el = document.getElementById("geo");
 navigator.geolocation.getCurrentPosition(function(position){el.lat = position.coords.latitude ;
 el.lon = position.coords.longitude ;
 console.log('Sending data');
-console.log({ latitude: el.lat , 
+console.log();
+var payload = JSON.stringify({ latitude: el.lat , 
     longitude:el.lon	});
 $.ajax('/map', {
     type: 'POST',  // http method
-	contentType: 'application/json;charset=UTF-8',
-    data:{ latitude: el.lat , 
-    longitude:el.lon	} ,  // data to submit
+    data:payload ,  // data to submit
     success: function (data, status, xhr) {
-       //console.log(data);
+       console.log(data);
+	   if(data == "reload")
+	   {
+			location.reload();
+	   }
     },
     error: function (jqXhr, textStatus, errorMessage) {
             
